@@ -1,0 +1,139 @@
+<!--Bootstrap container-->
+<div class="container">
+
+    {{!--
+    <!--Header-->
+    <div class="row">
+
+        <div class="col-md-4">
+
+        </div>
+
+        <div class="col-md-4">
+
+            <br>
+
+            <center>
+                <img src="assets\img\burger.png">
+            </center>
+
+            <center>
+                <strong>
+                    <h1>Eat-Da-Burger!</h1>
+                </strong>
+            </center>
+
+            <br>
+            <br>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+        </div>
+
+    </div> --}}
+
+
+    <!--Row for displaying the bugers-->
+    <div class="row">
+
+        <!--Displays the un-devoured burgers & their corresponding "Devour it!" buttons-->
+        <div class="col-md-12">
+
+            <h4>
+                <strong>Articles</strong>
+            </h4>
+
+
+            <div id="articles">
+
+
+
+                <!--For each item in the burgers array... -->
+                {{#each articles}}
+
+
+
+                <!--Create a Bootstrap "well" that holds that burger's ID & name-->
+                <div class="well">
+                    <h2><a href="{{link}}" target="_blank">{{title}}</a></h2>
+                    <p>{{summary}}</p>
+                </div>
+
+
+
+                {{/each}}
+
+            </div>
+
+
+        </div>
+
+        {{!--
+        <!--Displays the devoured burgers-->
+        <div class="col-md-6">
+
+            <h4>
+                <strong>Devoured</strong>
+            </h4>
+
+            <!--For each item in the burgers array... -->
+            {{#each burgers}}
+
+            <!--If that burger was devoured... -->
+            {{#if devoured}}
+
+            <!--Create a Bootstrap "well" that holds that burger's ID & name-->
+            <div class="well">
+                {{id}}. {{burger_name}}
+            </div>
+            {{/if}} {{/each}}
+
+        </div> --}}
+
+    </div>
+
+
+    {{!--
+    <!--Row for displaying the submit textbox & submit button that adds a new buger to the DB-->
+    <div class="row">
+
+        <div class="col-md-3">
+
+        </div>
+
+
+        <div class="col-md-6">
+
+            <br>
+
+            <textarea class="form-control" rows="3" id="burger-box" placeholder="Enter A Burger Name!"></textarea>
+
+            <br>
+
+            <button type="submit" id="burger-submit" class="btn btn-primary btn-lg btn-block">Submit!</button>
+
+            <br>
+
+            <center>
+                <strong>
+                    <p>Enter a burger you want to eat & then click the "Submit" button.</p>
+                </strong>
+            </center>
+
+            <br>
+
+
+        </div>
+
+
+        <div class="col-md-3">
+
+
+        </div>
+
+    </div> --}}
+
+</div>
