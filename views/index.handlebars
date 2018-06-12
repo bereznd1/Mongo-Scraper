@@ -1,46 +1,15 @@
 <!--Bootstrap container-->
 <div class="container">
 
-    {{!--
-    <!--Header-->
-    <div class="row">
-
-        <div class="col-md-4">
-
-        </div>
-
-        <div class="col-md-4">
-
-            <br>
-
-            <center>
-                <img src="assets\img\burger.png">
-            </center>
-
-            <center>
-                <strong>
-                    <h1>Eat-Da-Burger!</h1>
-                </strong>
-            </center>
-
-            <br>
-            <br>
-
-        </div>
-
-
-        <div class="col-md-4">
-
-        </div>
-
-    </div> --}}
-
 
     <!--Row for displaying the bugers-->
     <div class="row">
 
         <!--Displays the un-devoured burgers & their corresponding "Devour it!" buttons-->
         <div class="col-md-12">
+
+
+
 
             <h4>
                 <strong>Articles</strong>
@@ -58,11 +27,12 @@
 
                 <!--Create a Bootstrap "well" that holds that burger's ID & name-->
                 <div class="well">
-                    <h2>{{title}}</h2>
+                    <h2><a href="{{link}}" target="_blank">{{title}}</a></h2>
                     <p>{{summary}}</p>
-                    <a href="{{link}}" target="_blank">Read More!</a>
 
-                    <button type="button"  class="view-comments" data-id="{{_id}}" class="btn btn-info btn-lg" data-toggle="modal" data-target="#comments-modal">View Comments!</a>
+                    <br>
+
+                    <button type="button" data-id="{{_id}}" class="btn btn-info btn-lg view-comments" data-toggle="modal" data-target="#comments-modal">View Comments!</button>
                 </div>
 
 
@@ -72,126 +42,131 @@
             </div>
 
 
-        </div>
 
 
 
 
-        <!-- Modal -->
-        <div id="comments-modal" class="modal fade" role="dialog">
-            <div class="modal-dialog">
+            <!-- Modal -->
+            <div id="comments-modal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
 
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Comments:</h4>
-                    </div>
-                    <div class="modal-body">
-
-
-
-                        <h3 id="title"></p>
-
-                        <br>
-                        
-                        <p id="existing-comment-title"></p>
-                        <p id="existing-comment-body"></p>
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h3 id="article-title" class="modal-title">Comments:</h3>
+                        </div>
+                        <div class="modal-body">
 
 
-    
+                            
+                                <strong><h4>Comments:</h4></strong>
 
-
-                    {{!-- <form action="/articles/{{_id}}"  method="post"> --}}
+                                <br> 
+                                <p id="existing-comment-title"></p>
+                                <p id="existing-comment-body"></p>
+                         
 
 
 
-                        <div class="form-group">
-                            <label for="name">Name:</label>
-                            <input type="text" class="form-control" id="name" placeholder="Enter your name!">
 
-                            <label for="comment">Comment:</label>
-                            <textarea class="form-control" id="comment" rows="4"></textarea>
 
-                            <button type="button"  data-id="{{_id}}" id="post-comment" class="btn btn-primary">Post!</button>
+                            <hr>
+
+                            <div class="form-group">
+                                <label for="name">Name:</label>
+                                <input type="text" class="form-control" id="name" placeholder="Enter your name!">
+
+                                <br>
+
+                                <label for="comment">Comment:</label>
+                                <textarea class="form-control" id="comment" rows="4"></textarea>
+
+                                <br>
+
+                                <div id="post-button">
+                                {{!-- <button type="button" data-id="{{_id}}" class="btn btn-primary post-comment">Post!</button> --}}
+
+                                </div>
+                              
+
+                            </div>
+
 
                         </div>
-
-                    {{!-- </form> --}}
-
-
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" data-id="{{_id}}" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
+
                 </div>
-
             </div>
+
+
+
         </div>
 
-        {{!--
-        <!--Displays the devoured burgers-->
-        <div class="col-md-6">
+    </div>
+</div>
 
-            <h4>
-                <strong>Devoured</strong>
-            </h4>
 
-            <!--For each item in the burgers array... -->
-            {{#each burgers}}
 
-            <!--If that burger was devoured... -->
-            {{#if devoured}}
+{{!--
+<!--Displays the devoured burgers-->
+<div class="col-md-6">
 
-            <!--Create a Bootstrap "well" that holds that burger's ID & name-->
-            <div class="well">
-                {{id}}. {{burger_name}}
-            </div>
-            {{/if}} {{/each}}
+    <h4>
+        <strong>Devoured</strong>
+    </h4>
 
-        </div> --}}
+    <!--For each item in the burgers array... -->
+    {{#each burgers}}
+
+    <!--If that burger was devoured... -->
+    {{#if devoured}}
+
+    <!--Create a Bootstrap "well" that holds that burger's ID & name-->
+    <div class="well">
+        {{id}}. {{burger_name}}
+    </div>
+    {{/if}} {{/each}}
+
+</div> --}} {{!--
+<!--Row for displaying the submit textbox & submit button that adds a new buger to the DB-->
+<div class="row">
+
+    <div class="col-md-3">
 
     </div>
 
 
-    {{!--
-    <!--Row for displaying the submit textbox & submit button that adds a new buger to the DB-->
-    <div class="row">
+    <div class="col-md-6">
 
-        <div class="col-md-3">
+        <br>
 
-        </div>
+        <textarea class="form-control" rows="3" id="burger-box" placeholder="Enter A Burger Name!"></textarea>
 
+        <br>
 
-        <div class="col-md-6">
+        <button type="submit" id="burger-submit" class="btn btn-primary btn-lg btn-block">Submit!</button>
 
-            <br>
+        <br>
 
-            <textarea class="form-control" rows="3" id="burger-box" placeholder="Enter A Burger Name!"></textarea>
+        <center>
+            <strong>
+                <p>Enter a burger you want to eat & then click the "Submit" button.</p>
+            </strong>
+        </center>
 
-            <br>
-
-            <button type="submit" id="burger-submit" class="btn btn-primary btn-lg btn-block">Submit!</button>
-
-            <br>
-
-            <center>
-                <strong>
-                    <p>Enter a burger you want to eat & then click the "Submit" button.</p>
-                </strong>
-            </center>
-
-            <br>
+        <br>
 
 
-        </div>
+    </div>
 
 
-        <div class="col-md-3">
+    <div class="col-md-3">
 
 
-        </div>
+    </div>
 
-    </div> --}}
-
-</div>
+</div> --}}
