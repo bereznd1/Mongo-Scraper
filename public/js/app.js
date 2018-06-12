@@ -1,93 +1,80 @@
-//Requires the Express package to manage the server/routing
-var express = require("express");
 
-// Require all models
-var db = require("./models");
-
-// Initialize Express
-var app = express();
-
-//Activates the express Router to be able to use it with the various routing functions
-var router = express.Router();
-
-
-
-// $.getJSON("/articles", function(data) {
-//     // For each one
-//     for (var i = 0; i < data.length; i++) {
-//       // Display the apropos information on the page
-//       $("#articles").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + "</p>");
-//     }
-//   });
+// Whenever someone clicks a p tag
+$(document).on("click", ".view-comments", function() {
+    // // Empty the notes from the note section
+    // $("#notes").empty();
+    // Save the id from the p tag
+    var thisId = $(this).attr("data-id");
+  
+    // Now make an ajax call for the Article
+    $.ajax({
+      method: "GET",
+      url: "/articles/" + thisId
+    })
+      // With that done, add the note information to the page
+      .then(function(data) {
+        console.log(data);
 
 
+        $("#title").text(data.title);
+        $("#summary").text(data.summary);
+
+              // If there's a note in the article
+      if (data.comment) {
+        // Place the title of the note in the title input
+        $("#existing-comment-title").val(data.comment.title);
+        // Place the body of the note in the body textarea
+        $("#existing-comment-body").val(data.comment.body);
+      }
+
+
+        // // The title of the article
+        // $("#notes").append("<h2>" + data.title + "</h2>");
+        // // An input to enter a new title
+        // $("#notes").append("<input id='titleinput' name='title' >");
+        // // A textarea to add a new note body
+        // $("#notes").append("<textarea id='bodyinput' name='body'></textarea>");
+        // // A button to submit a new note, with the id of the article saved to it
+        // $("#notes").append("<button data-id='" + data._id + "' id='savenote'>Save Note</button>");
+  
+        // // If there's a note in the article
+        // if (data.note) {
+        //   // Place the title of the note in the title input
+        //   $("#titleinput").val(data.note.title);
+        //   // Place the body of the note in the body textarea
+        //   $("#bodyinput").val(data.note.body);
+        // }
+      });
+  });
 
 
 
 
-// router.get("/articles", function(req, res) {
-//     // For each one
-//     for (var i = 0; i < data.length; i++) {
-//       // Display the apropos information on the page
-//       $("#articles").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + "</p>");
-//     }
-//   });
-
-
-
-
-
-// router.get("/articles", function(req, res) {
-//   db.Article.find({})
-//     .then(function(dbArticle) {
-//       // If we were able to successfully find Articles, send them back to the client
-//       var articlesObject = {
-//         articles: dbArticle
-//       };
-
-//       console.log(articlesObject);
-
-//       //Uses the "index" Handlebars page to load the results of the query into it
-//       res.render("index", articlesObject);
+// // When you click the savenote button
+// $(document).on("click", "#savenote", function() {
+//     // Grab the id associated with the article from the submit button
+//     var thisId = $(this).attr("data-id");
+  
+//     // Run a POST request to change the note, using what's entered in the inputs
+//     $.ajax({
+//       method: "POST",
+//       url: "/articles/" + thisId,
+//       data: {
+//         // Value taken from title input
+//         title: $("#titleinput").val(),
+//         // Value taken from note textarea
+//         body: $("#bodyinput").val()
+//       }
 //     })
-//     .catch(function(err) {
-//       // If an error occurred, send it to the client
-//       res.json(err);
-//     });
-
-// });
-
-
-
-// // Route for getting all Articles from the db
-// app.get("/articles", function(req, res) {
-//   // Grab every document in the Articles collection
-//   db.Article.find({})
-//     .then(function(dbArticle) {
-//       // If we were able to successfully find Articles, send them back to the client
-//       res.json(dbArticle);
-//     })
-//     .catch(function(err) {
-//       // If an error occurred, send it to the client
-//       res.json(err);
-//     });
-// });
-
-
-    
-
-  // // For each one
-  // for (var i = 0; i < data.length; i++) {
-  //   // Display the apropos information on the page
-  //   $("#articles").append(
-  //     "<p data-id='" +
-  //       data[i]._id +
-  //       "'>" +
-  //       data[i].title +
-  //       "<br />" +
-  //       data[i].link +
-  //       "<br />" +
-  //       data[i].summary +
-  //       "</p>"
-  //   );
-  // }
+//       // With that done
+//       .then(function(data) {
+//         // Log the response
+//         console.log(data);
+//         // Empty the notes section
+//         $("#notes").empty();
+//       });
+  
+//     // Also, remove the values entered in the input and textarea for note entry
+//     $("#titleinput").val("");
+//     $("#bodyinput").val("");
+//   });
