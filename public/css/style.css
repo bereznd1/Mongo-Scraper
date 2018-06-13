@@ -79,18 +79,17 @@ header {
 }
 
 .view-comments {
-  color: #000000;
   border-style: solid;
   border-width: 3px;
   border-color: #000000;
 }
 
 .view-comments:hover {
-  color: #000000;
   border-style: solid;
   border-width: 3px;
   border-color: #000000;
 }
+
 
 .footer-copyright {
   text-align: center;

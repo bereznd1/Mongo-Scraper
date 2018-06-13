@@ -55,15 +55,6 @@
             <!--Displays the un-devoured burgers & their corresponding "Devour it!" buttons-->
             <div class="col-md-12">
 
-
-
-
-                {{!--
-                <h4>
-                    <strong>Articles</strong>
-                </h4> --}}
-
-
                 <div id="articles">
 
 
@@ -83,8 +74,7 @@
                         <br>
 
                         <center>
-                            <button type="button" data-id="{{_id}}" class="btn btn-info btn-lg view-comments" data-toggle="modal"
-                                data-target="#comments-modal">View Comments!</button>
+                            <button type="button" data-id="{{_id}}" class="btn btn-info btn-lg view-comments" data-toggle="modal" data-target="#comments-modal">View Comments!</button>
                         </center>
                     </div>
 
@@ -123,8 +113,6 @@
                                     <br>
 
                                     <div id="post-button">
-                                        {{!--
-                                        <button type="button" data-id="{{_id}}" class="btn btn-primary post-comment">Post!</button> --}}
 
                                     </div>
 
@@ -141,8 +129,9 @@
 
 
                                 <br>
-                                <p id="existing-comment-title"></p>
-                                <p id="existing-comment-body"></p>
+
+                                <div id="existing-comments"></div>
+
 
 
 
