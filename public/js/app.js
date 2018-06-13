@@ -24,12 +24,12 @@ $(document).on("click", ".view-comments", function() {
 
 
       // If there's a note in the article
-      if (data.comment) {
-        // Place the title of the note in the title input
-        $("#existing-comment-title").text(data.comment.title);
-        // Place the body of the note in the body textarea
-        $("#existing-comment-body").text(data.comment.body);
-      }
+    //   if (data.comment) {
+    //     // Place the title of the note in the title input
+    //     $("#existing-comment-title").text(data.comment.title);
+    //     // Place the body of the note in the body textarea
+    //     $("#existing-comment-body").text(data.comment.body);
+    //   }
 
   
 
@@ -62,9 +62,9 @@ $(document).on("click", ".post-comment", function() {
         // Log the response
         console.log(data);
 
-        $("#existing-comment-title").text(data.comment.title);
-        // Place the body of the note in the body textarea
-        $("#existing-comment-body").text(data.comment.body);
+        // $("#existing-comment-title").text(data.comment.title);
+        // // Place the body of the note in the body textarea
+        // $("#existing-comment-body").text(data.comment.body);
 
 
 
