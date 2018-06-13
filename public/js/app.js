@@ -14,6 +14,8 @@ $(document).on("click", ".view-comments", function() {
     .then(function(data) {
       console.log(data);
 
+      $("#existing-comments").empty();
+
       $("#article-title").text(data.title);
 
       $("#post-button").html(
@@ -24,13 +26,17 @@ $(document).on("click", ".view-comments", function() {
       // $("#summary").text(data.summary);
 
       // If there's a comment in the article
+
+
       if (data.comment) {
         data.comment.forEach(function(element) {
-          $("#existing-comments").append(
-            element.title + "<br>" + element.body + "<br><br>"
+        
+          $("#existing-comments").prepend(
+            element.name + "<br>" + element.body + "<br><br>"
           );
         });
       }
+
     });
 });
 
@@ -60,6 +66,19 @@ $(document).on("click", ".post-comment", function() {
     .then(function(data) {
       // Log the response
       console.log(data);
+
+      if (data.comment) {
+
+        var lastComment = data.comment.length - 1;
+console.log(data.comment);
+        
+          $("#existing-comments").prepend(
+
+                 
+            data.comment[lastComment].name + "<br>" + data.comment[lastComment].body + "<br><br>"
+          );
+      
+      }
 
       // $("#existing-comment-title").text(data.comment.title);
       // // Place the body of the note in the body textarea

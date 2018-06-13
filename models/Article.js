@@ -19,28 +19,26 @@ var ArticleSchema = new Schema({
     required: true
   },
 
-
   summary: {
     type: String,
     unique: true,
     required: true
   },
 
-
-
   // `note` is an object that stores a Note id
   // The ref property links the ObjectId to the Note model
   // This allows us to populate the Article with an associated Note
 
   //This isnt an array like in the other examples bc we only have 1 note for each article, not an array of notes
-  comment: {
+  comment: [
+    {
+      //"Schema.Types.ObjectID" is a special mongoose type that finds the ID of that item in the collection
+      type: Schema.Types.ObjectId,
 
-    //"Schema.Types.ObjectID" is a special mongoose type that finds the ID of that item in the collection
-    type: Schema.Types.ObjectId,
-
-    //this looks into that collection & finds the ID of each item in it
-    ref: "Comment"
-  }
+      //this looks into that collection & finds the ID of each item in it
+      ref: "Comment"
+    }
+  ]
 });
 
 // This creates our model from the above schema, using mongoose's model method

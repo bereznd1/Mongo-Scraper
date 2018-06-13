@@ -35,7 +35,7 @@ app.set("view engine", "handlebars");
 app.use(express.static("public"));
 
 // If deployed, use the deployed database. Otherwise use the local mongoHeadlines database
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoScraper";
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoMusicScraper";
 
 // Set mongoose to leverage built in JavaScript ES6 Promises
 // Connect to the Mongo DB
@@ -102,8 +102,6 @@ app.get("/", function(req, res) {
         articles: dbArticleReverse
       };
 
-      console.log(articlesObject);
-
       //Uses the "index" Handlebars page to load the results of the query into it
       res.render("index", articlesObject);
     })
@@ -129,6 +127,7 @@ app.get("/", function(req, res) {
                         .then(function(dbArticle) {
                             // If we were able to successfully find an Article with the given id, send it back to the client
                             res.json(dbArticle);
+                            console.log(dbArticle);
                           })
                           .catch(function(err) {
                             // If an error occurred, send it to the client
@@ -160,12 +159,30 @@ app.post("/articles/:id", function(req, res) {
     .then(function(dbArticle) {
       // If we were able to successfully update an Article, send it back to the client
       res.json(dbArticle);
+      console.log(dbArticle);
     })
     .catch(function(err) {
       // If an error occurred, send it to the client
       res.json(err);
     });
 });
+
+
+
+
+// Route for deleting an Article's associated Note
+app.get("/delete/:id", function(req, res) {
+
+    db.Comment.findOneAndRemove({ _id: req.params.id }, function (err) {
+        if (err) {
+            res.json(err);
+        }
+        // deleted at most one tank document
+      });
+  
+  });
+
+
 
 
 
