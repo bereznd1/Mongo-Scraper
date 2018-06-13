@@ -1,164 +1,186 @@
 <header>
-    
-        <nav class="navbar navbar-default navbar-fixed-top">
-            <div class="container">
-                <!-- Brand and toggle get grouped for better mobile display -->
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
-                        aria-expanded="false">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" id="logo" href="/">Mongo Scraper</a>
-                </div>
 
-                <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a href="/scrape">Scrape New Articles!</a>
-                        </li>
-                    </ul>
-                </div>
-                <!-- /.navbar-collapse -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+                    aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" id="logo" href="/">Mongo Music Scraper</a>
             </div>
-            <!-- /.container-fluid -->
-        </nav>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/scrape">Scrape New Articles!</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
 
 </header>
 
 
 <main>
 
-<!--Bootstrap container-->
-<div class="container">
-
-
-    <!--Row for displaying the bugers-->
-    <div class="row">
-
-        <!--Displays the un-devoured burgers & their corresponding "Devour it!" buttons-->
-        <div class="col-md-12">
 
 
 
-
-            <h4>
-                <strong>Articles</strong>
-            </h4>
+    <!--Bootstrap container-->
+    <div class="container">
 
 
-            <div id="articles">
+        <div class="row">
 
-
-
-                <!--For each item in the burgers array... -->
-                {{#each articles}}
-
-
-
-                <!--Create a Bootstrap "well" that holds that burger's ID & name-->
-                <div class="well">
-                    <h2><a href="{{link}}" target="_blank">{{title}}</a></h2>
-                    <p>{{summary}}</p>
-
-                    <br>
-
-                    <button type="button" data-id="{{_id}}" class="btn btn-info btn-lg view-comments" data-toggle="modal" data-target="#comments-modal">View Comments!</button>
-                </div>
-
-
-
-                {{/each}}
-
+            <div class="col-md-12">
+                <img class="img-responsive banner" src="img/banner.jpg">
             </div>
-
-
-
-
-
-
-            <!-- Modal -->
-            <div id="comments-modal" class="modal fade" role="dialog">
-                <div class="modal-dialog">
-
-                    <!-- Modal content-->
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h3 id="article-title" class="modal-title">Comments:</h3>
-                        </div>
-                        <div class="modal-body">
-
-                            <div class="form-group">
-                                <label for="name">Name:</label>
-                                <input type="text" class="form-control" id="name" placeholder="Enter your name!">
-
-                                <br>
-
-                                <label for="comment">Comment:</label>
-                                <textarea class="form-control" id="comment" rows="4"></textarea>
-
-                                <br>
-
-                                <div id="post-button">
-                                {{!-- <button type="button" data-id="{{_id}}" class="btn btn-primary post-comment">Post!</button> --}}
-
-                                </div>
-                              
-
-                            </div>
-                            
-                             <hr>
-
-
-                                <strong><h4>Comments:</h4></strong>
-
-
-                                    
-                                <br> 
-                                <p id="existing-comment-title"></p>
-                                <p id="existing-comment-body"></p>
-                         
-
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-
 
         </div>
 
+
+
+        <!--Row for displaying the bugers-->
+        <div class="row">
+
+            <!--Displays the un-devoured burgers & their corresponding "Devour it!" buttons-->
+            <div class="col-md-12">
+
+
+
+
+                {{!--
+                <h4>
+                    <strong>Articles</strong>
+                </h4> --}}
+
+
+                <div id="articles">
+
+
+
+                    <!--For each item in the burgers array... -->
+                    {{#each articles}}
+
+
+
+                    <!--Create a Bootstrap "well" that holds that burger's ID & name-->
+                    <div class="well">
+                        <h2>
+                            <a href="{{link}}" target="_blank">{{title}}</a>
+                        </h2>
+                        <p id="article-summary">{{summary}}</p>
+
+                        <br>
+
+                        <center>
+                            <button type="button" data-id="{{_id}}" class="btn btn-info btn-lg view-comments" data-toggle="modal"
+                                data-target="#comments-modal">View Comments!</button>
+                        </center>
+                    </div>
+
+
+
+                    {{/each}}
+
+                </div>
+
+
+
+
+
+
+                <!-- Modal -->
+                <div id="comments-modal" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h3 id="article-title" class="modal-title">Comments:</h3>
+                            </div>
+                            <div class="modal-body">
+
+                                <div class="form-group">
+                                    <label for="name">Name:</label>
+                                    <input type="text" class="form-control" id="name" placeholder="Enter your name!">
+
+                                    <br>
+
+                                    <label for="comment">Comment:</label>
+                                    <textarea class="form-control" id="comment" rows="4"></textarea>
+
+                                    <br>
+
+                                    <div id="post-button">
+                                        {{!--
+                                        <button type="button" data-id="{{_id}}" class="btn btn-primary post-comment">Post!</button> --}}
+
+                                    </div>
+
+
+                                </div>
+
+                                <hr>
+
+
+                                <strong>
+                                    <h4>Comments:</h4>
+                                </strong>
+
+
+
+                                <br>
+                                <p id="existing-comment-title"></p>
+                                <p id="existing-comment-body"></p>
+
+
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+            </div>
+
+        </div>
     </div>
-</div>
 
 </main>
 
 
-    <footer class="navbar-bottom">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-3">
-                </div>
+<footer class="navbar-bottom">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+            </div>
 
-                <div class="col-md-6">
-                    <p class="footer-copyright">&copy; Copyright 2018 Mongo Scraper</p>
-                </div>
+            <div class="col-md-6">
+                <p class="footer-copyright">&copy; Copyright 2018 Mongo Scraper</p>
+            </div>
 
-                <div class="col-md-3">
+            <div class="col-md-3">
 
-                </div>
             </div>
         </div>
-    </footer>
+    </div>
+</footer>
 
 {{!--
 <!--Displays the devoured burgers-->
