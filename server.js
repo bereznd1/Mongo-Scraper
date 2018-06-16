@@ -57,7 +57,7 @@ var MONGODB_URI =
 //Sets mongoose to leverage built in JavaScript ES6 Promises
 //Connects to the Mongo DB
 mongoose.Promise = Promise;
-mongoose.connect(MONGODB_URI);
+
 
 
 
@@ -205,6 +205,7 @@ app.get("/delete/:id", function(req, res) {
 
 
 
+mongoose.connect(MONGODB_URI);
 
 //Starts the server
 app.listen(PORT, function() {
