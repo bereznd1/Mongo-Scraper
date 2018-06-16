@@ -32,9 +32,6 @@
 
 <main>
 
-
-
-
     <!--Bootstrap container-->
     <div class="container">
 
@@ -48,23 +45,17 @@
         </div>
 
 
-
-        <!--Row for displaying the bugers-->
+        <!--Row for displaying the Articles-->
         <div class="row">
 
-            <!--Displays the un-devoured burgers & their corresponding "Devour it!" buttons-->
             <div class="col-md-12">
 
                 <div id="articles">
 
-
-
-                    <!--For each item in the burgers array... -->
+                    <!--For each item in the Articles array... -->
                     {{#each articles}}
 
-
-
-                    <!--Create a Bootstrap "well" that holds that burger's ID & name-->
+                    <!--Create a Bootstrap "well" that holds that Article's info-->
                     <div class="well">
                         <h2>
                             <a href="{{link}}" target="_blank">{{title}}</a>
@@ -78,8 +69,6 @@
                         </center>
                     </div>
 
-
-
                     {{/each}}
 
                 </div>
@@ -87,9 +76,7 @@
 
 
 
-
-
-                <!-- Modal -->
+                <!-- Comments Modal -->
                 <div id="comments-modal" class="modal fade" role="dialog">
                     <div class="modal-dialog">
 
@@ -101,6 +88,7 @@
                             </div>
                             <div class="modal-body">
 
+                                <!--Comment form-->
                                 <div class="form-group">
                                     <label for="name">Name:</label>
                                     <input type="text" class="form-control" id="name" placeholder="Enter your name!">
@@ -122,17 +110,14 @@
                                 <hr>
 
 
+                                <!--Section to display existing comments-->
                                 <strong>
                                     <h4>Comments:</h4>
                                 </strong>
 
-
-
                                 <br>
 
                                 <div id="existing-comments"></div>
-
-
 
 
                             </div>
@@ -144,14 +129,13 @@
                     </div>
                 </div>
 
-
-
             </div>
 
         </div>
     </div>
 
 </main>
+
 
 
 <footer class="navbar-bottom">
@@ -161,7 +145,7 @@
             </div>
 
             <div class="col-md-6">
-                <p class="footer-copyright">&copy; Copyright 2018 Mongo Scraper</p>
+                <p class="footer-copyright">&copy; 2018 Mongo Music Scraper</p>
             </div>
 
             <div class="col-md-3">

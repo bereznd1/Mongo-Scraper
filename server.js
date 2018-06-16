@@ -1,27 +1,39 @@
+//Requiring necessary packages
+
+//Handles routing
 var express = require("express");
 
-// Set Handlebars.
+//Handles templating
 var exphbs = require("express-handlebars");
 
-//Set up parsing of info that is sent to the server.
+//Sets up parsing of info that is sent to the server.
 var bodyParser = require("body-parser");
+
+//Sets up ORM for interacting with MongoDB.
 var mongoose = require("mongoose");
 
-// Our scraping tools
 
-// Makes HTTP request for HTML page
+
+//Our scraping tools
+
+//Makes HTTP request for HTML page
 var request = require("request");
+
+//Scrapes the contents of a page
 var cheerio = require("cheerio");
 
-// Require all models
+//Requires all models
 var db = require("./models");
 
+//Sets up a port for the app to run on
 var PORT = 3000;
 
-// Initialize Express
+//Initializes Express
 var app = express();
 
-// Configure middleware
+
+
+//Configuring middleware
 
 //Configures bodyParser
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -31,41 +43,45 @@ app.use(bodyParser.json());
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
-// Use express.static to serve the public folder as a static directory
+//Allows the app to use express.static to serve the public folder as a static directory
 app.use(express.static("public"));
 
-// If deployed, use the deployed database. Otherwise use the local mongoHeadlines database
+
+
+//Connecting to the DB
+
+//If deployed, use the deployed database. Otherwise use the local mongoMusicScraper database
 var MONGODB_URI =
   process.env.MONGODB_URI || "mongodb://localhost/mongoMusicScraper";
 
-// Set mongoose to leverage built in JavaScript ES6 Promises
-// Connect to the Mongo DB
+//Sets mongoose to leverage built in JavaScript ES6 Promises
+//Connects to the Mongo DB
 mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI);
 
 
 
-// Routes
 
-//CREATES NEW ARTICLES IN THE ARTICLE COLLECTION FOR EVERY ARTICLE IT SCRAPES OFF THE SITE
 
-// A GET route for scraping the echoJS website
+//Routes
+
+//Creates new articles in the Article collection for every article the app scrapes off the site
 app.get("/scrape", function(req, res) {
-  // First, we grab the body of the html with request
+  //Sends a request out to the desired URL
   request(
     "https://www.nytimes.com/section/arts/music?action=click&contentCollection=arts&region=navbar&module=collectionsnav&pagetype=sectionfront&pgtype=sectionfront",
+
+    //When the request goes through...
     function(error, response, html) {
-      // Then, we load that into cheerio and save it to $ for a shorthand selector
+      //The HTML that is returned is loaded into cheerio and saved to "$" for a shorthand selector
       var $ = cheerio.load(html);
 
-      //FOR EVERY SINGLE ARTICLE H2 ON THE PAGE, WE MAKE AN OBJECT AND CREATE A NEW ARTICLE IN THE DB WITH IT
-
-      // Now, we grab every h2 within an article tag, and do the following:
+      //Grabs every ".story-link" within the page...
       $(".story-link").each(function(i, element) {
-        // Save an empty result object
+        //Saves an empty result object
         var result = {};
 
-        // Add the text and href of every link, and save them as properties of the result object
+        //Add the title, summary, and link of every article and saves them as properties of the result object
         result.title = $(this)
           .find("h2")
           .text();
@@ -74,21 +90,20 @@ app.get("/scrape", function(req, res) {
           .text();
         result.link = $(this).attr("href");
 
-        // Create a new Article using the `result` object built from scraping
+        //Creates a new Article using the `result` object built from scraping
         db.Article.create(result)
           .then(function(dbArticle) {
-            // View the added result in the console
+            //Logs the added article in the console
             console.log(dbArticle);
           })
           .catch(function(err) {
-            // If an error occurred, send it to the client
-            console.log(err)
+            //If an error occurs, log it
+            console.log(err);
           });
       });
 
-      // If we were able to successfully scrape and save an Article, send a message to the client
+      //Loads up the "Scraped" page after scraping is complete
       res.render("scraped", {});
-      
     }
   );
 });
@@ -97,12 +112,12 @@ app.get("/scrape", function(req, res) {
 
 
 
-// Route for getting all Articles from the db
+//Gets all Articles from the DB
 app.get("/", function(req, res) {
-  // Grab every document in the Articles collection
+  //Grabs every document in the Articles collection
   db.Article.find({})
     .then(function(dbArticle) {
-
+      //Creates an object built from the results of the query
       var articlesObject = {
         articles: dbArticle
       };
@@ -111,7 +126,7 @@ app.get("/", function(req, res) {
       res.render("index", articlesObject);
     })
     .catch(function(err) {
-      // If an error occurred, send it to the client
+      //If an error occurrs, sends it to the client
       res.json(err);
     });
 });
@@ -120,20 +135,21 @@ app.get("/", function(req, res) {
 
 
 
-// Route for grabbing a specific Article by id, populate it with it's note
+//Grabs a specific Article by ID & populates it with its Comments
 app.get("/articles/:id", function(req, res) {
-  // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
+  //Using the ID passed into the ID parameter, prepares a query that finds the Article with the matching ID in the DB...
   db.Article.findOne({ _id: req.params.id })
-    // ..and populate all of the notes associated with it
+
+    //...and populates all of the Comments associated with it
+    //This supplies the rest of the Comments' property values to the Article besides just its ID, which was the only Comment property pushed to the Article's Comments array originally
     .populate("comment")
 
     .then(function(dbArticle) {
-      // If we were able to successfully find an Article with the given id, send it back to the client
+      //If we were able to successfully find an Article with the given ID, sends it back to the client
       res.json(dbArticle);
-      console.log(dbArticle);
     })
     .catch(function(err) {
-      // If an error occurred, send it to the client
+      //If an error occurs, sends it to the client
       res.json(err);
     });
 });
@@ -141,16 +157,15 @@ app.get("/articles/:id", function(req, res) {
 
 
 
-// Route for saving/updating an Article's associated Note
+
+//Saves an Article's associated Comment
 app.post("/articles/:id", function(req, res) {
-  // Create a new note and pass the req.body to the entry
+  //Creates a new comment using the information submitted
   db.Comment.create(req.body)
 
     .then(function(dbComment) {
-      // If a Note was created successfully, find one Article with an `_id` equal to `req.params.id`. Update the Article to be associated with the new Note
-      // { new: true } tells the query that we want it to return the updated User -- it returns the original by default
-      // Since our mongoose query returns a promise, we can chain another `.then` which receives the result of the query
-
+      //If a Comment was created successfully, finds one Article with an `_id` equal to `req.params.id`
+      //Pushes the new Comment into that Article's "Comment" array
       return db.Article.findOneAndUpdate(
         { _id: req.params.id },
         { $push: { comment: dbComment._id } },
@@ -158,12 +173,11 @@ app.post("/articles/:id", function(req, res) {
       );
     })
     .then(function(dbArticle) {
-      // If we were able to successfully update an Article, send it back to the client
+      //If we were able to successfully update an Article, sends it back to the client
       res.json(dbArticle);
-      console.log(dbArticle);
     })
     .catch(function(err) {
-      // If an error occurred, send it to the client
+      //If an error occurs, sends it to the client
       res.json(err);
     });
 });
@@ -171,15 +185,19 @@ app.post("/articles/:id", function(req, res) {
 
 
 
-// Route for deleting an Article's associated Note
+
+
+//Deletes a comment
 app.get("/delete/:id", function(req, res) {
+  //Queries the Comment collection for a comment with the specified ID
   db.Comment.findOneAndRemove({ _id: req.params.id })
 
     .then(function(dbDeleted) {
+      //If the query was succesful, send the deleted comment back to the client
       res.json(dbDeleted);
-      console.log(dbDeleted);
     })
     .catch(function(err) {
+      //If an error occurs, sends it back to the client
       res.json(err);
     });
 });
@@ -188,8 +206,7 @@ app.get("/delete/:id", function(req, res) {
 
 
 
-
-// Start the server
+//Starts the server
 app.listen(PORT, function() {
   console.log("App running on port " + PORT + "!");
 });

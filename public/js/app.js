@@ -1,30 +1,36 @@
+//Sets up a function for viewing the comments on a particular article
 function viewComments() {
-  // Whenever someone clicks a p tag
+  //Whenever someone clicks a "View Comments" button...
   $(document).on("click", ".view-comments", function() {
-    // Save the id from the p tag
+    //Save the ID from that button
     var thisId = $(this).attr("data-id");
 
-    // Now make an ajax call for the Article
+    //Send a GET request to the server
     $.ajax({
       method: "GET",
       url: "/articles/" + thisId
     })
-      // With that done, add the note information to the page
+      //After the GET request goes through...
       .then(function(data) {
+        //Empty all the existing comments in the Comments modal
         $("#existing-comments").empty();
 
+        //Fill in the title of the article at the top of the Comments modal
         $("#article-title").text(data.title);
 
+        //Create a Post button in the Comments modal
         $("#post-button").html(
           ' <button type="button" data-id="' +
             data._id +
             '" class="btn btn-primary post-comment" data-dismiss="modal">Post!</button>'
         );
 
-        // If there's a comment in the article
-
+        //If there's a comment associated with the article...
         if (data.comment) {
+          //Go through each comment...
           data.comment.forEach(function(element) {
+            //Add the comment's information to the comments section
+            //Each comment is placed in a Div that has a class of the comment's ID, & a Delete button that also stores the comment's ID, so that the comment can be easily removed later on
             $("#existing-comments").prepend(
               "<div class = '" +
                 element._id +
@@ -42,49 +48,57 @@ function viewComments() {
   });
 }
 
+
+
+//Sets up a function for posting a new comment
 function postComment() {
-  // When you click the savenote button
+  //Whenever someone clicks the "Post" button...
   $(document).on("click", ".post-comment", function() {
-    // Grab the id associated with the article from the Post button
+    //Save the ID from that button
     var thisId = $(this).attr("data-id");
 
-    // Run a POST request to change the note, using what's entered in the inputs
+    //Send a POST request to the server
     $.ajax({
       method: "POST",
       url: "/articles/" + thisId,
       data: {
-        // Value taken from title input
+        //Value taken from the Name input
         name: $("#name").val(),
-        // Value taken from note textarea
+        // Value taken from Comment textarea
         body: $("#comment").val()
       }
-    })
+    });
 
-    // Also, remove the values entered in the input and textarea for note entry
+    //Remove the values entered currently typed into the form
     $("#name").val("");
     $("#comment").val("");
   });
 }
 
-function deleteComment() {
-  // When you click the DELETE BUTTON
-  $(document).on("click", ".delete-comment", function() {
 
-    // Grab the id associated with the article from the submit button
+
+//Sets up a function for deleting a comment
+function deleteComment() {
+  //Whenever someone clicks the "X" button next to a comment...
+  $(document).on("click", ".delete-comment", function() {
+    //Save the ID from that button
     var thisId = $(this).attr("data-id");
 
-    // Run a POST request to change the note, using what's entered in the inputs
+    //Send a GET request to the server
     $.ajax({
       method: "GET",
       url: "/delete/" + thisId
     })
-      // With that done
+      //Once the request is complete, delete the comment off the page
       .then(function(data) {
         $("." + thisId).remove();
       });
   });
 }
 
+
+
+//Runs all the necessary functions that are defined above
 viewComments();
 postComment();
 deleteComment();
