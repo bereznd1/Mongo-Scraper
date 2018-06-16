@@ -35,12 +35,14 @@ app.set("view engine", "handlebars");
 app.use(express.static("public"));
 
 // If deployed, use the deployed database. Otherwise use the local mongoHeadlines database
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoMusicScraper";
+var MONGODB_URI =
+  process.env.MONGODB_URI || "mongodb://localhost/mongoMusicScraper";
 
 // Set mongoose to leverage built in JavaScript ES6 Promises
 // Connect to the Mongo DB
 mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI);
+
 
 
 // Routes
@@ -68,7 +70,7 @@ app.get("/scrape", function(req, res) {
           .find("h2")
           .text();
         result.summary = $(this)
-          .find("p")
+          .find(".summary")
           .text();
         result.link = $(this).attr("href");
 
@@ -80,15 +82,20 @@ app.get("/scrape", function(req, res) {
           })
           .catch(function(err) {
             // If an error occurred, send it to the client
-            return res.json(err);
+            console.log(err)
           });
       });
 
       // If we were able to successfully scrape and save an Article, send a message to the client
-      res.send("Scrape Complete");
+      res.render("scraped", {});
+      
     }
   );
 });
+
+
+
+
 
 // Route for getting all Articles from the db
 app.get("/", function(req, res) {
@@ -96,10 +103,8 @@ app.get("/", function(req, res) {
   db.Article.find({})
     .then(function(dbArticle) {
 
-    var dbArticleReverse = dbArticle.reverse();
-
       var articlesObject = {
-        articles: dbArticleReverse
+        articles: dbArticle
       };
 
       //Uses the "index" Handlebars page to load the results of the query into it
@@ -115,28 +120,23 @@ app.get("/", function(req, res) {
 
 
 
+// Route for grabbing a specific Article by id, populate it with it's note
+app.get("/articles/:id", function(req, res) {
+  // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
+  db.Article.findOne({ _id: req.params.id })
+    // ..and populate all of the notes associated with it
+    .populate("comment")
 
-
-        // Route for grabbing a specific Article by id, populate it with it's note
-        app.get("/articles/:id", function(req, res) {
-        // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
-                    db.Article.findOne({ _id: req.params.id })
-                        // ..and populate all of the notes associated with it
-                        .populate("comment")
-
-                        .then(function(dbArticle) {
-                            // If we were able to successfully find an Article with the given id, send it back to the client
-                            res.json(dbArticle);
-                            console.log(dbArticle);
-                          })
-                          .catch(function(err) {
-                            // If an error occurred, send it to the client
-                            res.json(err);
-                          });
-                      });
-
-
-
+    .then(function(dbArticle) {
+      // If we were able to successfully find an Article with the given id, send it back to the client
+      res.json(dbArticle);
+      console.log(dbArticle);
+    })
+    .catch(function(err) {
+      // If an error occurred, send it to the client
+      res.json(err);
+    });
+});
 
 
 
@@ -145,11 +145,12 @@ app.get("/", function(req, res) {
 app.post("/articles/:id", function(req, res) {
   // Create a new note and pass the req.body to the entry
   db.Comment.create(req.body)
+
     .then(function(dbComment) {
       // If a Note was created successfully, find one Article with an `_id` equal to `req.params.id`. Update the Article to be associated with the new Note
       // { new: true } tells the query that we want it to return the updated User -- it returns the original by default
       // Since our mongoose query returns a promise, we can chain another `.then` which receives the result of the query
-      
+
       return db.Article.findOneAndUpdate(
         { _id: req.params.id },
         { $push: { comment: dbComment._id } },
@@ -172,67 +173,16 @@ app.post("/articles/:id", function(req, res) {
 
 // Route for deleting an Article's associated Note
 app.get("/delete/:id", function(req, res) {
+  db.Comment.findOneAndRemove({ _id: req.params.id })
 
-    db.Comment.findOneAndRemove({ _id: req.params.id }, function (err) {
-        if (err) {
-            res.json(err);
-        }
-        // deleted at most one tank document
-      });
-  
-  });
-
-
-
-
-
-// db.Note.create(req.body)
-// .then(function(dbNote) {
-//   // If a Note was created successfully, find one Article with an `_id` equal to `req.params.id`. Update the Article to be associated with the new Note
-//   // { new: true } tells the query that we want it to return the updated User -- it returns the original by default
-//   // Since our mongoose query returns a promise, we can chain another `.then` which receives the result of the query
-//   return db.Article.findOneAndUpdate({ _id: req.params.id }, { note: dbNote._id }, { new: true });
-// })
-// .then(function(dbArticle) {
-//   // If we were able to successfully update an Article, send it back to the client
-//   res.json(dbArticle);
-// })
-// .catch(function(err) {
-//   // If an error occurred, send it to the client
-//   res.json(err);
-// });
-
-
-
-
-
-
-
-// // Route for saving/updating an Article's associated Note
-// app.post("/articles/:id", function(req, res) {
-//     // Create a new note and pass the req.body to the entry
-//     db.Note.create(req.body)
-//       .then(function(dbNote) {
-//         // If a Note was created successfully, find one Article with an `_id` equal to `req.params.id`. Update the Article to be associated with the new Note
-//         // { new: true } tells the query that we want it to return the updated User -- it returns the original by default
-//         // Since our mongoose query returns a promise, we can chain another `.then` which receives the result of the query
-//         return db.Article.findOneAndUpdate({ _id: req.params.id }, { $push: { note: dbNote._id } }, { new: true });
-//       })
-//       .then(function(dbArticle) {
-//         // If we were able to successfully update an Article, send it back to the client
-//         res.json(dbArticle);
-//       })
-//       .catch(function(err) {
-//         // If an error occurred, send it to the client
-//         res.json(err);
-//       });
-//   });
-
-
-
-
-
-
+    .then(function(dbDeleted) {
+      res.json(dbDeleted);
+      console.log(dbDeleted);
+    })
+    .catch(function(err) {
+      res.json(err);
+    });
+});
 
 
 
