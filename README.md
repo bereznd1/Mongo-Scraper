@@ -1,8 +1,8 @@
 # MongoDB/Mongoose "Mongo Music Scraper" App
 
-![Express/MySQL/Handlebars "Eat-Da-Burger" App](screenshot.png)
+![MongoDB/Mongoose "Mongo Music Scraper" App](screenshot.png)
 
-[View Live!](https://dry-sierra-51259.herokuapp.com/)
+[View Live!](https://mighty-gorge-10700.herokuapp.com/)
 
 ## Brief Description
 
